@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+.sectiononemain{
+    margin-top: 50px;
+}
+
+.sectionone h1{
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 40px;
+}
+
+.iconbox img{
+    width: 10%;
+}
+
+.iconbox h3{
+    font-family: 'Poppins';
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.iconbox p{
+    font-size: 16px;
+    font-family: 'Poppins';
+}
+
+.icons{
+    background: #eeee;
+    padding: 20px 20px 20px 20px;
+}
+
+.downloadbtn{
+    text-align: center;
+    margin-top: 50px;
+}
+
+.downloadbtn h1{
+    font-weight: 800;
+    font-family: 'Poppins';
+    margin-top: 20px;
+}
+
+.btndownload{
+    margin-top: 30px;
+}

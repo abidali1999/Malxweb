@@ -1,0 +1,27 @@
+.ibox{
+    text-align: center;
+}
+
+.ibox img{
+    width: 15%;
+}
+
+.ibox p{
+    margin-top: 10px;
+}
+
+.ibox{
+    border: 1px solid #000;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+.ibox:hover {
+    background: #eee;
+    border-radius: 10px;
+}

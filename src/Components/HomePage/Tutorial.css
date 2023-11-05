@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+.tutorialhead h1{
+    text-align: center;
+    margin-top: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-size:35px;
+    font-weight: 900;
+}
+
+.stepsrow{
+    margin-top: 40px;
+}
+
+.stepimg img{
+    border:2px solid #000;
+}
+
+.steponehead h2{
+    font-family: 'Poppins', sans-serif;
+    font-size:25px;
+    font-weight: 900;
+}
+
+.steponehead p{
+    font-size: 18px;
+    font-family: 'Poppins';
+    margin-top: 20px;
+}
+
+.steponehead{
+    margin-top: 70px;
+}

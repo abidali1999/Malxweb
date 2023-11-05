@@ -1,0 +1,44 @@
+import React from 'react';
+import './FIleupload.css';
+import scanner from '../../assets/icons/scanner.png';
+import Dragdrop from '../Dragdrop/Dragdrop';
+
+function Fileupload() {
+  return (
+    <div>
+      <div className='container-fluid' style={{ background: "#eee", padding: "20px" }}>
+        <div className='container'>
+          <div className='row'>
+            <div className='col-md-12'>
+              <h2>FILE UPLOAD</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className='container'>
+        <div className='row'>
+            <div className='col-md-3'></div>
+            <div className='col-md-6' style={{textAlign:"center"}}>
+                <h1>Virus Scanner</h1>
+                <p>Drag and drop suspicious files to detect malware and other breaches for free.Scan any document, image, pdf, or other file types. Make sure your files are safe and free from viruses before you open them with Internxt's zero-knowledge Virus Scanner.</p>
+            </div>
+            <div className='col-md-3'></div>
+        </div>
+
+        <div className='row' style={{marginBottom:"20px"}}>
+            <div className='col-md-2'></div>
+            <div className='col-md-4'>
+                <div className='maxfilesize'>
+                  <img src={scanner}/>
+                  <p>MAX FILE SIZE OF 1 GB</p>
+                </div>
+            </div>
+            <div className='col-md-4'><Dragdrop /></div>
+            <div className='col-md-2'></div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Fileupload

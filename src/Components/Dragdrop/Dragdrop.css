@@ -1,0 +1,9 @@
+.dropzone{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 360px;
+    border:4px dashed #000;
+    padding:20px
+}
