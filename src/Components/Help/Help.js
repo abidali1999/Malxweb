@@ -4,11 +4,12 @@ import customcare from '../../assets/icons/customercare.png';
 import tools from '../../assets/icons/tools.png';
 import './Help.css'
 import FAQ from '../../Components/HomePage/FAQ';
+import Ctitle from '../Ctitle/Ctitle';
 
 function Help() {
   return (
     <>
-      <div className='container-fluid' style={{ background: "#eee",padding:"20px"}}>
+      {/* <div className='container-fluid' style={{ background: "#eee",padding:"20px"}}>
         <div className='container'>
           <div className='row'>
             <div className='col-md-12'>
@@ -16,7 +17,9 @@ function Help() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+
+      <Ctitle title="Help" />
 
       <div className='container'>
         <div className='row' style={{marginTop:"20px"}}>

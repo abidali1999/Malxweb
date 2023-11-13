@@ -2,11 +2,12 @@ import React from 'react';
 import './FIleupload.css';
 import scanner from '../../assets/icons/scanner.png';
 import Dragdrop from '../Dragdrop/Dragdrop';
+import Ctitle from '../Ctitle/Ctitle';
 
 function Fileupload() {
   return (
     <div>
-      <div className='container-fluid' style={{ background: "#eee", padding: "20px" }}>
+      {/* <div className='container-fluid' style={{ background: "#eee", padding: "20px" }}>
         <div className='container'>
           <div className='row'>
             <div className='col-md-12'>
@@ -14,7 +15,8 @@ function Fileupload() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+      <Ctitle title="File Upload"/>
       <div className='container'>
         <div className='row'>
             <div className='col-md-3'></div>

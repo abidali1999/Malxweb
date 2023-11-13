@@ -1,11 +1,12 @@
 import React from 'react';
 import './Feedback.css'
+import Ctitle from '../Ctitle/Ctitle';
 
 
 function Feedback() {
   return (
     <>
-      <div className='container-fluid' style={{ background: "#eee", padding: "20px" }}>
+      {/* <div className='container-fluid' style={{ background: "#eee", padding: "20px" }}>
         <div className='container'>
           <div className='row'>
             <div className='col-md-12'>
@@ -13,7 +14,9 @@ function Feedback() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+
+      <Ctitle title="Feedback" />
 
       <div className='container'>
         <div className='row'>

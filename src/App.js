@@ -14,6 +14,9 @@ import Directoryscan from './Components/Directoryscan/Directoryscan';
 import Help from './Components/Help/Help';
 import Setting from './Components/Setting/Setting';
 import Feedback from './Components/Feedback/Feedback';
+import Cresult from './Components/Cresult/Cresult';
+import Qthreats from './Components/Qthreats/Qthreats';
+import Scanhistory from './Components/Scanhistory/Scanhistory';
 
 function App() {
 
@@ -34,6 +37,9 @@ function App() {
         <Route path="/openhelp" element={ <Help /> } />
         <Route path="/setting" element={ <Setting /> } />
         <Route path="/feedback" element={ <Feedback /> } />
+        <Route path="/classfication" element={ <Cresult /> } />
+        <Route path="/Qthreats" element={ <Qthreats /> } />
+        <Route path="/scanhistory" element={ <Scanhistory /> } />
         
     </Routes>
 

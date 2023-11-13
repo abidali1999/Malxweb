@@ -1,12 +1,13 @@
 import React from 'react';
 import './Setting.css'
 import { Link } from 'react-router-dom';
+import Ctitle from '../Ctitle/Ctitle';
 
 
 function Setting() {
   return (
     <>
-      <div className='container-fluid' style={{ background: "#eee", padding: "20px" }}>
+      {/* <div className='container-fluid' style={{ background: "#eee", padding: "20px" }}>
         <div className='container'>
           <div className='row'>
             <div className='col-md-12'>
@@ -14,7 +15,9 @@ function Setting() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+
+      <Ctitle title="Setting" />
 
       <div className='container' style={{ marginTop: "20px", marginBottom: "20px" }}>
         <div className='row'>

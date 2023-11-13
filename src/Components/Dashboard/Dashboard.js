@@ -62,7 +62,7 @@ function Dashboard() {
                 </div>
 
                 <div className='col-md-3 iconsbox'>
-                    <Link>
+                    <Link to="/classfication">
                     <div className='ibox'>
                         <img src={classification}/>
                         <p>Classification Result</p>
@@ -74,7 +74,7 @@ function Dashboard() {
 
             <div className='row' style={{marginBottom:"50px"}}>
             <div className='col-md-3 iconsbox'>
-                    <Link>
+                    <Link to="/Qthreats"> 
                     <div className='ibox'>
                         <img src={protection} alt='protection'/>
                         <p>Quarantined Threats</p>
