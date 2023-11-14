@@ -11,9 +11,12 @@ function Directoryscan() {
   const [progress, setProgress] = useState(0);
   const [predictionResults, setPredictionResults] = useState({});
   const [validFilePaths, setValidFilePaths] = useState([]);
+  const [scanStartTime, setScanStartTime] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(false);
 
-  const opendirectory = () => {
-    fileInputRef.current.click();
+  const closeModal = () => {
+    // Close the modal
+    setModalOpen(false);
   };
 
   const handleDirectoryChange = (event) => {
@@ -23,7 +26,6 @@ function Directoryscan() {
       const directoryPath = files[0].webkitRelativePath;
       setSelectedDirectory(directoryPath);
 
-      // Get the list of valid file paths
       const fileList = Array.from(files);
       const maxFileSize = 3 * 1024 * 1024;
 
@@ -36,26 +38,57 @@ function Directoryscan() {
       const validPaths = validFiles.map((file) => URL.createObjectURL(file));
       setValidFilePaths(validPaths);
     }
-    // console.log("valid paths: ",validFilePaths.length)
-    
   };
+  const saveScanData = (endTime) => {
+    const scanData = {
+      directoryPath: selectedDirectory,
+      dateTime: new Date().toLocaleString(),
+      totalFilesScanned: validFilePaths.length,
+      totalTimeTaken: calculateTimeDifference(scanStartTime, endTime),
+      threatsFound: Object.keys(predictionResults).filter(
+        (fileName) => predictionResults[fileName] !== 'benign'
+      ),
+    };
+
+    // Retrieve existing scan history from local storage or initialize an empty array
+    const existingScanHistory = JSON.parse(localStorage.getItem('scanHistory')) || [];
+
+    // Add the current scan data to the history
+    existingScanHistory.push(scanData);
+
+    // Save the updated scan history back to local storage
+    localStorage.setItem('scanHistory', JSON.stringify(existingScanHistory));
+  };
+
+  const calculateTimeDifference = (startTime, endTime) => {
+    if (startTime && endTime) {
+      const durationInMilliseconds = endTime - startTime;
+      const seconds = Math.floor(durationInMilliseconds / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const formattedTime = `${minutes}m ${seconds % 60}s`;
+
+      return formattedTime;
+    }
+
+    return 'N/A';
+  };
+
+
   useEffect(() => {
-    // This code will run after the component re-renders
     console.log("valid paths: ", validFilePaths.length);
   }, [validFilePaths]); 
   const handleClick = async () => {
+    setScanStartTime(new Date());
     if (selectedDirectory && validFilePaths.length > 0) {
       setIsLoading(true);
       setProgress(0);
       setPredictionResults({});
       const suspiciousFiles = [];
-
       const promises = validFilePaths.map(async (filePath, index) => {
         const response = await fetch(filePath);
         const blob = await response.blob();
         const file = new File([blob], blob.name || `unknownFileName_${index}`);
         await createAndSendByteplot(file, index);
-
         if (
           predictionResults[file.name] &&
           predictionResults[file.name] !== 'benign'
@@ -63,9 +96,7 @@ function Directoryscan() {
           suspiciousFiles.push(filePath);
         }
       });
-
       try {
-        // Wait for all predictions to complete
         await Promise.all(promises);
       } catch (error) {
         console.error('An error occurred during predictions:', error);
@@ -73,12 +104,14 @@ function Directoryscan() {
         setIsLoading(false);
         setProgress(100);
 
-        // Display results
         if (suspiciousFiles.length === 0) {
           console.log('Scan complete, no suspicious files found');
         } else {
           console.log('Suspicious files found:', suspiciousFiles);
         }
+        const scanEndTime = new Date();
+        saveScanData(scanEndTime);
+        setModalOpen(true);
       }
     }
   };
@@ -113,9 +146,6 @@ function Directoryscan() {
     } catch (error) {
       console.error('An error occurred during prediction:', error);
     }
-
-    // Update the progress
-    // console.log("prev progress: ",prevProgress)
     setProgress((prevProgress) => (prevProgress+1)*(100 / validFilePaths.length));
   };
 
@@ -144,13 +174,6 @@ function Directoryscan() {
                 <p>{selectedDirectory}</p>
               </div>
             )}
-            {/* <button
-              className='btn btn-dark mt-2'
-              onClick={handleClick}
-              disabled={isLoading}
-            >
-              Scan
-            </button> */}
             {isLoading && (
               <div className='progress' style={{ marginTop: '20px' }}>
                 <div
@@ -191,6 +214,34 @@ function Directoryscan() {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Scan Details</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModal}>
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                {selectedDirectory && (
+                  <div>
+                    <p><strong>Directory:</strong> {selectedDirectory}</p>
+                    <p><strong>Date:</strong> {new Date().toLocaleString()}</p>
+                    <p><strong>Total Files Scanned:</strong> {validFilePaths.length}</p>
+                    <p><strong>Total Time Taken:</strong> {calculateTimeDifference(scanStartTime, new Date())}</p>
+                    <p><strong>Threats Found:</strong> {Object.keys(predictionResults).filter(fileName => predictionResults[fileName] !== 'benign').join(', ')}</p>
+                  </div>
+                )}
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={closeModal}>Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
