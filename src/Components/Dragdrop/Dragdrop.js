@@ -4,7 +4,6 @@ import './Dragdrop.css';
 function Dragdrop() {
   const [files, setFiles] = useState(null);
   const [predictionResult, setPredictionResult] = useState(null);
-  const [isModalOpen, setModalOpen] = useState(false);
   const inputRef = useRef();
 
   const handledragover = (event) => {
@@ -33,9 +32,49 @@ function Dragdrop() {
           const jsonResponse = await response.json();
           const result = jsonResponse.predicted_class;
           setPredictionResult(result);
-
-          // Open the modal
-          setModalOpen(true);
+          if (result !== 'benign') {
+            // Encrypt the file using Fernet
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+              const fileData = event.target.result;
+              const key = Fernet.generateKey();
+              const cipher = new Fernet(key);
+              const encryptedData = cipher.encrypt(fileData);
+  
+              // Convert the encrypted data to a Blob
+              const encryptedBlob = new Blob([encryptedData], { type: file.type });
+  
+              // Move the file to an isolated location on the user's system
+              const isolatedPath = '/path/to/isolated/location'; // Specify your desired path
+              const isolatedFilePath = `${isolatedPath}/${file.name}`;
+              const downloadLink = document.createElement('a');
+              downloadLink.href = URL.createObjectURL(encryptedBlob);
+              downloadLink.download = file.name;
+              downloadLink.click();
+  
+              // Call the API with file details and Fernet key
+              const apiResponse = await fetch('https://your-api-endpoint/quarantine', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  email: 'user@example.com', // Replace with actual user email
+                  source_path: file.name,
+                  quarantine_path: isolatedFilePath,
+                  key_text: key.toString('utf-8'),
+                }),
+              });
+  
+              if (!apiResponse.ok) {
+                alert('Failed to call quarantine API. Please try again.');
+              }
+            };
+  
+            reader.readAsArrayBuffer(file);
+          }
+          
         } else {
           // Handle API response error
           alert('Prediction failed. Please try again.');
@@ -51,36 +90,8 @@ function Dragdrop() {
     }
   };
 
-  const closeModal = () => {
-    // Close the modal
-    setModalOpen(false);
-    // Clear the selected file(s) state
-    setFiles(null);
-  };
-
   return (
     <>
-      {isModalOpen && (
-        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Prediction Result</h5>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModal}>
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <p><strong>Predicted Class:</strong> {predictionResult}</p>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={closeModal}>Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       {files ? (
         <div className='uploads'>
           <ul>
@@ -97,6 +108,12 @@ function Dragdrop() {
           <h3>Or</h3>
           <input type='file' multiple onChange={(event) => setFiles(event.target.files)} hidden ref={inputRef} />
           <button className='btn btn-dark' onClick={() => inputRef.current.click()}>Select Files</button>
+        </div>
+      )}
+
+      {predictionResult && (
+        <div className="prediction-label">
+          <p><strong>Predicted Class:</strong> {predictionResult}</p>
         </div>
       )}
     </>

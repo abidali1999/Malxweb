@@ -117,37 +117,40 @@ function Directoryscan() {
   };
 
   const createAndSendByteplot = async (file, index) => {
-    if (!file.name) {
-      console.error('File name is undefined:', file);
-      return;
-    }
+  if (!file.name) {
+    console.error('File name is undefined:', file);
+    return;
+  }
 
-    const formData = new FormData();
-    formData.append('file', file);
+  const formData = new FormData();
+  formData.append('file', file);
 
-    try {
-      const response = await fetch(
-        'https://abidali1999063.pythonanywhere.com/predict',
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setPredictionResults((prevResults) => ({
-          ...prevResults,
-          [file.name]: data.predicted_class,
-        }));
-      } else {
-        console.error('Prediction request failed for file:', file.name);
+  try {
+    const response = await fetch(
+      'https://abidali1999063.pythonanywhere.com/predict',
+      {
+        method: 'POST',
+        body: formData,
       }
-    } catch (error) {
-      console.error('An error occurred during prediction:', error);
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      setPredictionResults((prevResults) => ({
+        ...prevResults,
+        [file.name]: data.predicted_class,
+      }));
+    } else {
+      console.error('Prediction request failed for file:', file.name);
     }
-    setProgress((prevProgress) => (prevProgress+1)*(100 / validFilePaths.length));
-  };
+  } catch (error) {
+    console.error('An error occurred during prediction:', error);
+  }
+  
+  // Update progress based on the current file's index
+  setProgress((prevProgress) => ((prevProgress * index + 1) / validFilePaths.length) * 100);
+};
+
 
   return (
     <>
